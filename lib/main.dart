@@ -1,6 +1,11 @@
+import 'package:base_flutter/services/service_locator.dart';
+import 'package:base_flutter/ui/router.dart' as router;
+import 'package:base_flutter/ui/views/home/home_view.dart';
+import 'package:base_flutter/ui/views/unknown_route_view.dart';
 import 'package:flutter/material.dart';
 
 void main() {
+  setupLocator();
   runApp(const MyApp());
 }
 
@@ -15,54 +20,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
+      initialRoute: router.initialRoute,
+      onGenerateRoute: router.Router.generateRoute,
+      routes: router.Router.defineRoute,
+      onUnknownRoute: (settings) => MaterialPageRoute(
+        builder: (context) => const UnknownRouteView(),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      home: const HomeView(),
     );
   }
 }
